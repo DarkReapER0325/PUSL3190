@@ -1,0 +1,68 @@
+    {
+      "categories": [
+        {
+      "label": "login",
+      "description": "user wants to log in, sign in, authenticate, access an existing account, enter the system using email and password, or open a personal dashboard after authentication"
+    },
+    {
+      "label": "registration",
+      "description": "user wants to register, sign up, create a new account, open a new account for first-time use, or open a new account in the system"
+    },
+    {
+      "label": "search",
+      "description": "user wants to search, find, look for, browse, or filter products, services, records, or information"
+    },
+    {
+      "label": "payment",
+      "description": "user wants to pay, make a payment, complete a transaction, or use a card or online method to send money"
+    },
+    {
+      "label": "profile",
+      "description": "user wants to view, edit, or update profile details, account details, or personal information"
+    },
+    {
+      "label": "password_reset",
+      "description": "user wants to reset, recover, or change a forgotten password"
+    },
+    {
+      "label": "logout",
+      "description": "user wants to log out, sign out, or end the current session"
+    },
+    {
+      "label": "email_verification",
+      "description": "user wants to verify, confirm, or activate an account using an email link"
+    },
+    {
+      "label": "cart",
+      "description": "user wants to add items to cart, remove items from cart, or manage a shopping cart"
+    },
+    {
+      "label": "order",
+      "description": "user wants to place an order, confirm an order, track an order, or manage order details"
+    },
+    {
+      "label": "booking",
+      "description": "user wants to book, reserve, or schedule a room, seat, service, or appointment"
+    },
+    {
+      "label": "file_upload",
+      "description": "user wants to upload, attach, submit, import, send, or add a file, document, image, resume, PDF, or attachment to the system"
+    },
+    {
+      "label": "notification",
+      "description": "user wants to receive alerts, reminders, messages, or notifications from the system"
+    },
+    {
+      "label": "admin",
+      "description": "administrator wants to manage users, monitor the system, control settings, or access the admin dashboard"
+    },
+    {
+      "label": "checkout",
+      "description": "user wants to proceed to checkout, complete checkout, or finalize a purchase"
+    },
+    {
+      "label": "page_navigation",
+      "description": "user wants to navigate between pages, open a page, move to a screen, or go from one page to another"
+    }
+  ]
+}

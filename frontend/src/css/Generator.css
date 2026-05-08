@@ -1,0 +1,160 @@
+.generator-page {
+  padding: 100px 20px 60px;
+  background: #f9fafb;
+}
+
+.generator-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.generator-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #111827;
+}
+
+.generator-header p {
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.generator-card {
+  max-width: 900px;
+  margin: auto;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.08);
+}
+
+.story-section {
+  margin-bottom: 20px;
+}
+
+.story-section label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.story-section textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  resize: none;
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.generate-btn {
+  width: 100%;
+  margin: 20px 0 30px;
+  padding: 14px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.generate-btn:hover {
+  background: #1d4ed8;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.results-header h3 {
+  font-size: 18px;
+}
+
+.copy-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: white;
+  cursor: pointer;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+thead {
+  background: #f3f4f6;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+th {
+  font-weight: 600;
+  color: #374151;
+}
+
+td {
+  color: #4b5563;
+}
+
+.edit-icon {
+  text-align: center;
+  cursor: pointer;
+}
+
+.result-summary {
+  margin-top: 20px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.result-summary p {
+  margin: 6px 0;
+  color: #1e293b;
+}
+
+.error-message {
+  margin-top: 14px;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.error-message-box {
+  margin-top: 20px;
+  padding: 16px 18px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  color: #b91c1c;
+  font-weight: 500;
+}

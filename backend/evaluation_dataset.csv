@@ -1,0 +1,5 @@
+story,expected_label
+"As a user, I want to log in using my email and password so that I can access my dashboard.",login
+"As a new user, I want to create an account so that I can start using the system.",registration
+"As a customer, I want to search products by name so that I can find items quickly.",search
+"As a buyer, I want to pay using my credit card so that I can complete the purchase.",payment

@@ -1,0 +1,26 @@
+{
+  "default_scenarios": [
+    "positive",
+    "invalid",
+    "missing",
+    "boundary"
+  ],
+  "intent_scenarios": {
+    "login": ["positive", "invalid_credentials", "missing"],
+    "registration": ["positive", "duplicate_email", "missing"],
+    "search": ["positive", "no_results", "missing"],
+    "payment": ["positive", "invalid_payment", "cancel", "authorization"],
+    "profile": ["positive", "invalid", "missing"],
+    "password_reset": ["positive", "unregistered_email", "invalid_token"],
+    "logout": ["positive", "post_logout_access", "session_invalidation"],
+    "email_verification": ["positive", "invalid_link", "expired_link"],
+    "cart": ["add_item", "remove_item", "update_quantity"],
+    "order": ["positive", "missing", "confirmation", "authorization"],
+    "booking": ["positive", "unavailable_slot", "missing"],
+    "file_upload": ["positive", "invalid_file_type", "file_too_large"],
+    "notification": ["triggered", "content_check", "disabled"],
+    "admin": ["admin_access", "non_admin_access", "manage_users"],
+    "checkout": ["positive", "empty_cart", "missing", "authorization"],
+    "page_navigation": ["positive", "page_unavailable", "authorization"]
+  }
+}

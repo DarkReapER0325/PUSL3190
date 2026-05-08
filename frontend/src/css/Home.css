@@ -1,0 +1,140 @@
+/* General */
+.home-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Hero */
+.hero-section {
+  text-align: center;
+  padding: 100px 20px;
+  background: linear-gradient(90deg, #dbeafe, #f3e8ff, #ffe4e6);
+}
+
+.badge {
+  background-color: #bfdbfe;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.hero-section h2 {
+  font-size: 48px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.hero-section h2 span {
+  color: #2563eb;
+}
+
+.hero-section p {
+  max-width: 600px;
+  margin: 20px auto;
+  color: #555;
+}
+
+.hero-buttons {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.primary-btn {
+  background-color: #2563eb;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.secondary-btn {
+  border: 1px solid #ccc;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.hero-info {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Features */
+.features-section {
+  background-color: #f3f4f6;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.features-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.feature-card {
+  background: white;
+  padding: 30px;
+  width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Steps */
+.steps-section {
+  padding: 80px 20px;
+  text-align: center;
+  background-color: white;
+}
+
+.steps-grid {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 40px;
+}
+
+.step-number {
+  background-color: #4f46e5;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  margin-bottom: 15px;
+}
+
+/* CTA */
+.cta-section {
+  margin: 60px;
+  padding: 60px;
+  text-align: center;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  color: white;
+}
+
+.cta-btn {
+  display: inline-block;
+  margin-top: 20px;
+  background: white;
+  color: #6366f1;
+  padding: 12px 30px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+}

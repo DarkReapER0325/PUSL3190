@@ -1,0 +1,54 @@
+.static-page {
+  min-height: calc(100vh - 80px);
+  padding: 130px 20px 70px;
+  background: #f8fafc;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.static-card {
+  width: 100%;
+  max-width: 800px;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.static-card h1 {
+  margin-bottom: 22px;
+  color: #111827;
+  font-size: 2rem;
+}
+
+.static-card h3 {
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: #111827;
+}
+
+.static-card p,
+.static-card li {
+  color: #475569;
+  line-height: 1.6;
+}
+
+.static-card ul {
+  margin-top: 10px;
+  padding-left: 22px;
+}
+
+@media (max-width: 768px) {
+  .static-page {
+    padding: 110px 16px 50px;
+  }
+
+  .static-card {
+    padding: 28px;
+  }
+
+  .static-card h1 {
+    font-size: 1.7rem;
+  }
+}
