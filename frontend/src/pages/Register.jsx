@@ -56,7 +56,6 @@ export default function Register() {
         terms_accepted: termsAccepted,
       });
 
-      alert("Account created successfully!");
       // Redirect to login page so user can authenticate with new credentials.
       navigate("/login");
     } catch (err) {

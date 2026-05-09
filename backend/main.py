@@ -25,6 +25,7 @@ from models import Category, Scenario
 # Create tables at startup so the app can run against a fresh local database.
 models.Base.metadata.create_all(bind=engine)
 
+
 app = FastAPI()
 
 # Allow the Vite frontend during local development to call this API.
@@ -51,11 +52,13 @@ semantic_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 # Hash a raw password before storing it in the database.
 def hash_password(password: str):
     # Keep the input within bcrypt's supported byte length.
     password = password[:72]
     return pwd_context.hash(password)
+
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
@@ -71,13 +74,15 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
     return encoded_jwt
 
-#Provide a database session for each request and close it safely
+
+# Provide a database session for each request and close it safely
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
 
 def get_current_user(
     token: str = Depends(oauth2_scheme),
@@ -108,10 +113,12 @@ def get_current_user(
 
     return user
 
+
 @app.get("/")
 # Lightweight health-check endpoint for local verification and deployments.
 def root():
     return {"message": "Backend running 🚀"}
+
 
 # 🔥 SIGNUP API
 @app.post("/signup", response_model=schemas.UserResponse)
@@ -143,6 +150,7 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
 
     return new_user
+
 
 # 🔥 LOGIN API
 @app.post("/login")
@@ -182,6 +190,7 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
 }
 
 
+
 def detect_intent(user_story: str, db):
     categories = db.query(Category).all()
 
@@ -204,6 +213,7 @@ def detect_intent(user_story: str, db):
     best_score = similarities[best_idx]
 
     return labels[best_idx], float(best_score)
+
 
 # Extract actor, action, object, goal, and condition from a user story sentence.
 def extract_story_parts(user_story: str) -> dict:
@@ -249,13 +259,15 @@ def extract_story_parts(user_story: str) -> dict:
 
     return result
 
-#Build a single standardized test case object
+
+# Build a single standardized test case object
 def create_test_case(tc_id: str, description: str, expected_result: str):
     return {
         "id": tc_id,
         "description": description,
         "expected_result": expected_result
     }
+
 
 def get_scenario_types(intent: str, db):
     scenarios = db.query(Scenario).filter(Scenario.intent == intent).all()
@@ -265,7 +277,8 @@ def get_scenario_types(intent: str, db):
 
     return [s.scenario_type for s in scenarios]  # 👈 THIS LINE IS CRITICAL
 
-#Generate intent-specific test cases for a given user story
+
+# Generate intent-specific test cases for a given user story
 def build_test_cases(intent: str, user_story: str, db):
     parts = extract_story_parts(user_story)
     actor = parts.get("actor", "user")
@@ -290,6 +303,7 @@ def build_test_cases(intent: str, user_story: str, db):
             counter += 1
 
     return test_cases
+
 
 def generate_test_case_from_scenario(scenario: str, actor: str, action: str, obj: str, intent: str):
     # Map each scenario keyword to a stable, human-readable test case shape.
@@ -512,6 +526,7 @@ def generate_test_case_from_scenario(scenario: str, actor: str, action: str, obj
 
     return None
 
+
 @app.get("/users")
 def get_users(
     db: Session = Depends(get_db),
@@ -520,6 +535,7 @@ def get_users(
     # This is a simple authenticated endpoint used for user listing/debugging.
     users = db.query(models.User).all()
     return users
+
 
 @app.post("/generate")
 def generate_test_cases(
@@ -608,6 +624,7 @@ def generate_test_cases(
         "error": ""
     }
 
+
 @app.get("/history")
 def get_generation_history(
     db: Session = Depends(get_db),
@@ -634,6 +651,7 @@ def get_generation_history(
         }
         for item in history
     ]
+
 
 @app.post("/feedback/history/{history_id}")
 def submit_history_feedback(
@@ -663,27 +681,38 @@ def submit_history_feedback(
     return {"message": "Feedback saved successfully"}
 
 
+
 @app.post("/feedback/correction")
 def submit_correction_feedback(
     data: dict,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    if not data.get("correct_intent"):
-        raise HTTPException(status_code=400, detail="Correct intent required")
+    correct_intent = data.get("correct_intent")
+    suggested_category = data.get("suggested_category")
+    rating = data.get("rating")
+
+    # Require at least one
+    if not correct_intent and not suggested_category:
+        raise HTTPException(
+            status_code=400,
+            detail="Select a category or suggest a new one"
+        )
 
     feedback = models.Feedback(
         story=data.get("story"),
         predicted_intent=data.get("predicted_intent"),
-        correct_intent=data.get("correct_intent"),
-        suggested_category=data.get("suggested_category"),
-        rating=data.get("rating")
+        correct_intent=correct_intent,
+        suggested_category=suggested_category,
+        rating=rating
     )
 
     db.add(feedback)
     db.commit()
 
-    return {"message": "Correction saved"}
+    return {"message": "Correction feedback submitted successfully"}
+
+
 
 @app.delete("/history/{history_id}")
 def delete_generation_history(
@@ -708,6 +737,7 @@ def delete_generation_history(
     db.commit()
 
     return {"message": "History item deleted successfully"}
+
 
 
 @app.post("/forgot-password")
@@ -739,6 +769,7 @@ def forgot_password(
     return {
         "message": "Password reset link generated. Check backend console for the reset link."
     }
+
 
 
 @app.post("/reset-password")
@@ -777,6 +808,7 @@ def reset_password(
     db.commit()
 
     return {"message": "Password reset successful. You can now log in."}
+
 
 
 @app.get("/categories")

@@ -19,7 +19,7 @@ function Generator() {
   const [historyId, setHistoryId] = useState(null);
   const [rating, setRating] = useState(0);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
-
+  const [correctionSubmitted, setCorrectionSubmitted] = useState(false);
   const [feedbackComment, setFeedbackComment] = useState("");
   const [correctIntent, setCorrectIntent] = useState("");
   const [suggestedCategory, setSuggestedCategory] = useState("");
@@ -83,6 +83,7 @@ function Generator() {
       setTestCases(response.data.test_cases || []);
       setHistoryId(response.data.history_id || null); // ✅ THIS WAS MISSING
       setError(response.data.error || "");
+      setCorrectionSubmitted(false);
       setFeedbackSubmitted(false); // reset feedback state
     } catch (error) {
       console.error("Generation failed:", error);
@@ -130,8 +131,8 @@ function Generator() {
       return;
     }
 
-    if (!correctIntent) {
-      alert("Please select correct category.");
+    if (!correctIntent && !suggestedCategory.trim()) {
+      alert("Please select a category OR suggest a new category.");
       return;
     }
 
@@ -144,8 +145,8 @@ function Generator() {
         {
           story: story,
           predicted_intent: intent,
-          correct_intent: correctIntent,
-          suggested_category: suggestedCategory,
+          correct_intent: correctIntent || null,
+          suggested_category: suggestedCategory || null,
           rating: rating,
         },
         {
@@ -155,7 +156,7 @@ function Generator() {
         },
       );
 
-      alert("Correction submitted!");
+      setCorrectionSubmitted(true);
     } catch (err) {
       console.error(err);
       alert("Failed to submit correction.");
@@ -191,7 +192,6 @@ function Generator() {
       );
 
       setFeedbackSubmitted(true);
-      alert("Rating submitted!");
     } catch (err) {
       console.error(err);
       alert("Failed to submit rating.");
@@ -228,62 +228,70 @@ function Generator() {
           <div className="error-message-box">
             <p>{error}</p>
 
-            {/* ⭐ FEEDBACK FOR FAILED MATCH */}
-            <div style={{ marginTop: "20px" }}>
-              <h4>Help improve detection</h4>
+            <div className="feedback-section">
+              {correctionSubmitted ? (
+                <div className="feedback-success">
+                  ✅ Correction submitted. Thank you!
+                </div>
+              ) : (
+                <>
+                  <h4 className="feedback-title">Help improve detection</h4>
 
-              {/* STAR RATING */}
-              <div style={{ marginBottom: "10px" }}>
-                {[1, 2, 3, 4, 5].map((num) => (
-                  <span
-                    key={num}
-                    onClick={() => setRating(num)}
-                    style={{
-                      cursor: "pointer",
-                      fontSize: "24px",
-                      color: num <= rating ? "gold" : "gray",
-                    }}
+                  {/* STAR RATING */}
+                  <div className="feedback-stars">
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <span
+                        key={num}
+                        onClick={() => setRating(num)}
+                        className={`star ${num <= rating ? "active" : ""}`}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* CATEGORY DROPDOWN */}
+                  <select
+                    value={correctIntent}
+                    onChange={(e) => setCorrectIntent(e.target.value)}
+                    className="feedback-select"
                   >
-                    ★
-                  </span>
-                ))}
-              </div>
+                    <option value="">Select correct category</option>
 
-              {/* CATEGORY DROPDOWN */}
-              <select
-                value={correctIntent}
-                onChange={(e) => setCorrectIntent(e.target.value)}
-                style={{ padding: "8px", marginBottom: "10px", width: "100%" }}
-              >
-                <option value="">Select correct category</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.label}>
+                        {category.label}
+                      </option>
+                    ))}
+                  </select>
 
-                {categories.map((category) => (
-                  <option key={category.id} value={category.label}>
-                    {category.label}
-                  </option>
-                ))}
-              </select>
+                  <p className="feedback-helper-text">
+                    If none of the categories match, suggest a new category
+                    below.
+                  </p>
 
-              <input
-                type="text"
-                placeholder="Suggest a new category (optional)"
-                value={suggestedCategory}
-                onChange={(e) => setSuggestedCategory(e.target.value)}
-                style={{
-                  padding: "8px",
-                  marginBottom: "10px",
-                  width: "100%",
-                }}
-              />
+                  {/* SUGGEST CATEGORY */}
+                  <input
+                    type="text"
+                    placeholder="Suggest a new category (optional)"
+                    value={suggestedCategory}
+                    onChange={(e) => setSuggestedCategory(e.target.value)}
+                    className="feedback-input"
+                  />
 
-              {/* SUBMIT */}
-              <button onClick={submitCorrection} disabled={rating === 0}>
-                Submit Feedback
-              </button>
+                  {/* SUBMIT */}
+                  <button
+                    className="feedback-btn"
+                    onClick={submitCorrection}
+                    disabled={rating === 0}
+                  >
+                    Submit Feedback
+                  </button>
+                </>
+              )}
             </div>
           </div>
         )}
-
         {/* Show intent and confidence only if no error and generation succeeded. */}
         {!error && (intent || confidence !== null) && (
           <div className="result-summary">
@@ -330,26 +338,22 @@ function Generator() {
             </div>
 
             {historyId && (
-              <div style={{ marginTop: "30px" }}>
-                <h3>Rate this result</h3>
+              <div className="rating-section">
+                <h3 className="rating-title">Rate this result</h3>
 
                 {feedbackSubmitted ? (
-                  <p style={{ color: "green" }}>
+                  <p className="rating-success">
                     ✅ Feedback submitted. Thank you!
                   </p>
                 ) : (
                   <>
                     {/* ⭐ STAR RATING */}
-                    <div style={{ marginBottom: "10px" }}>
+                    <div className="rating-stars">
                       {[1, 2, 3, 4, 5].map((num) => (
                         <span
                           key={num}
                           onClick={() => setRating(num)}
-                          style={{
-                            cursor: "pointer",
-                            fontSize: "24px",
-                            color: num <= rating ? "gold" : "gray",
-                          }}
+                          className={`star ${num <= rating ? "active" : ""}`}
                         >
                           ★
                         </span>
@@ -361,15 +365,15 @@ function Generator() {
                       placeholder="Write your feedback..."
                       value={feedbackComment}
                       onChange={(e) => setFeedbackComment(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        marginBottom: "10px",
-                      }}
+                      className="rating-textarea"
                     />
 
                     {/* 🚀 SUBMIT */}
-                    <button onClick={submitRating} disabled={rating === 0}>
+                    <button
+                      className="rating-btn"
+                      onClick={submitRating}
+                      disabled={rating === 0}
+                    >
                       Submit Feedback
                     </button>
                   </>

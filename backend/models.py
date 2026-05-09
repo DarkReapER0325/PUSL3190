@@ -48,7 +48,8 @@ class GenerationHistory(Base):
     feedback_comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
-# 🔹 NEW TABLES FOR DB-DRIVEN SYSTEM
+
+# New tables for DB-driven system
 
 class Category(Base):
     __tablename__ = "categories"

@@ -44,7 +44,6 @@ export default function Login() {
         sessionStorage.setItem("token", token);
       }
 
-      alert(res.data.message);
       // Redirect to the main app; axios interceptor will now attach the token to requests.
       navigate("/generator");
     } catch (err) {

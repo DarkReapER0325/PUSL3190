@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
 
 from main import detect_intent
+from database import SessionLocal
 
 
 # 2. Keyword-based classifier
@@ -64,7 +65,12 @@ y_true = df["expected_label"].tolist()
 
 # 5. Predictions
 y_pred_keyword = [detect_intent_keyword(story) for story in df["story"]]
-y_pred_semantic = [detect_intent(story)[0] for story in df["story"]]
+
+# Use a DB session when calling the semantic detector from `main.detect_intent`.
+db = SessionLocal()
+y_pred_semantic = [detect_intent(story, db)[0] for story in df["story"]]
+
+db.close()
 
 
 # 6. Results
