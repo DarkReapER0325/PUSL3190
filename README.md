@@ -103,7 +103,7 @@ npm --version
 ## 📁 Project Structure
 
 ```
-Msin Project/
+Main Project/
 ├── backend/                    # FastAPI backend
 │   ├── main.py                # Main entry point
 │   ├── models.py              # Database models
