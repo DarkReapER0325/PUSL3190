@@ -50,6 +50,7 @@ export default function Navbar() {
 
   // User is only considered logged in if both user object and token exist.
   const isLoggedIn = Boolean(user && token);
+  const isAdmin = user?.is_admin === true;
 
   // Display first name if available; fall back to email prefix; finally "User".
   const displayName =
@@ -116,6 +117,17 @@ export default function Navbar() {
 
                 {open && (
                   <div className="dropdown">
+                    {isAdmin && (
+                      <button
+                        className="dropdown-item admin-item"
+                        onClick={() => {
+                          setOpen(false);
+                          navigate("/admin/feedback");
+                        }}
+                      >
+                        🛠️ Admin Review
+                      </button>
+                    )}
 
                     <button
                       className="dropdown-item profile-item"

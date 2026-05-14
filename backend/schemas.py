@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 
 # Payload used by the signup endpoint.
@@ -37,3 +38,16 @@ class ForgotPasswordRequest(BaseModel):
 class ResetPasswordRequest(BaseModel):
     token: str
     new_password: str
+
+
+class FeedbackReviewResponse(BaseModel):
+    id: int
+    story: str
+    predicted_intent: Optional[str] = None
+    correct_intent: Optional[str] = None
+    suggested_category: Optional[str] = None
+    rating: Optional[int] = None
+    status: str
+
+    class Config:
+        from_attributes = True

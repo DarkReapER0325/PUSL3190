@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float, Boolean
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import Optional
 from datetime import datetime, timezone
@@ -14,7 +14,10 @@ class User(Base):
     first_name = Column(String)
     last_name = Column(String)
     email = Column(String, unique=True, index=True)
-    password = Column(String)
+    hashed_password = Column(String)
+
+    # Flag to indicate if the user is an administrator.
+    is_admin = Column(Boolean, default=False)
 
     # Temporary password-reset token and expiry managed by forgot/reset flows.
     reset_token = Column(String, nullable=True)
@@ -96,3 +99,6 @@ class Feedback(Base):
     correct_intent = Column(String)
     suggested_category = Column(String, nullable=True)
     rating = Column(Integer)
+
+    # Admin review status
+    status = Column(String, default="pending")

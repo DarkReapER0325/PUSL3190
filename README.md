@@ -103,7 +103,7 @@ npm --version
 ## 📁 Project Structure
 
 ```
-PUSL3190/
+Msin Project/
 ├── backend/                    # FastAPI backend
 │   ├── main.py                # Main entry point
 │   ├── models.py              # Database models
@@ -163,11 +163,18 @@ The backend uses SQLite by default. The database initializes automatically on fi
 
 1. Start the backend server (see setup instructions above)
 2. The database file `test.db` will be created in the `backend/` directory
-3. (Optional) Load initial data:
+3. Load initial data:
    ```bash
    python backend/load_initial_data.py
    ```
+4. (Optional) Default admin credentials created by the script:
 
+   - Email: admin@testcasegen.com
+   - Password: Admin@123
+
+   Admin Only Page
+   http://localhost:5173/admin/feedback
+   
 ---
 
 ## 📚 API Documentation

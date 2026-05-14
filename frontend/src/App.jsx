@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import AdminFeedback from "./pages/AdminFeedback";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 
@@ -74,6 +75,16 @@ function App() {
             {/* Static pages: publicly accessible for users to read terms and privacy. */}
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+
+            {/* Admin feedback route: accessible only to admins. */}
+            <Route
+              path="/admin/feedback"
+              element={
+                <ProtectedRoute>
+                  <AdminFeedback />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </main>
 

@@ -1,5 +1,64 @@
 story,expected_label
 "As a user, I want to log in using my email and password so that I can access my dashboard.",login
+"As a customer, I want to sign in securely to my account.",login
+"As an employee, I want to access the portal using my credentials.",login
+
 "As a new user, I want to create an account so that I can start using the system.",registration
+"As a visitor, I want to sign up using my email address.",registration
+"As a customer, I want to register for a new account.",registration
+
 "As a customer, I want to search products by name so that I can find items quickly.",search
+"As a user, I want to filter products by category.",search
+"As a buyer, I want to search for available hotels.",search
+
 "As a buyer, I want to pay using my credit card so that I can complete the purchase.",payment
+"As a customer, I want to make online payments securely.",payment
+"As a user, I want to complete payment using a debit card.",payment
+
+"As a user, I want to update my profile information.",profile
+"As a customer, I want to change my profile picture.",profile
+"As a user, I want to edit my account settings.",profile
+
+"As a user, I forgot my password and want to reset it.",password_reset
+"As a customer, I want to receive a password reset link.",password_reset
+"As a user, I want to create a new password after verification.",password_reset
+
+"As a user, I want to log out securely after using the system.",logout
+"As a customer, I want to sign out from my account.",logout
+"As a user, I want to end my current session.",logout
+
+"As a user, I want to verify my email address after registration.",email_verification
+"As a customer, I want to confirm my email using a verification code.",email_verification
+"As a user, I want to activate my account through email verification.",email_verification
+
+"As a customer, I want to add products to my shopping cart.",cart
+"As a user, I want to remove items from my cart.",cart
+"As a buyer, I want to update quantities in my cart.",cart
+
+"As a customer, I want to place an order for selected items.",order
+"As a buyer, I want to track my order status.",order
+"As a customer, I want to cancel my order before shipping.",order
+
+"As a traveler, I want to book a hotel room online.",booking
+"As a user, I want to reserve movie tickets.",booking
+"As a customer, I want to schedule an appointment.",booking
+
+"As a user, I want to upload my profile image.",file_upload
+"As a customer, I want to attach supporting documents.",file_upload
+"As an employee, I want to import files into the system.",file_upload
+
+"As a user, I want to receive notifications about new updates.",notification
+"As a customer, I want to receive email alerts for promotions.",notification
+"As a user, I want to enable push notifications.",notification
+
+"As an administrator, I want to manage user accounts.",admin
+"As an admin, I want to view system analytics.",admin
+"As an administrator, I want to control access permissions.",admin
+
+"As a customer, I want to review my order before checkout.",checkout
+"As a user, I want to complete the checkout process quickly.",checkout
+"As a buyer, I want to proceed to checkout securely.",checkout
+
+"As a user, I want dark mode support.",unknown
+"As a customer, I want the app theme to be customizable.",unknown
+"As a user, I want voice assistant integration.",unknown

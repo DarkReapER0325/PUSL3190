@@ -19,7 +19,7 @@ from datetime import timedelta
 
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from models import Category, Scenario
+
 
 
 # Create tables at startup so the app can run against a fresh local database.
@@ -113,6 +113,17 @@ def get_current_user(
 
     return user
 
+def require_admin(current_user: models.User = Depends(get_current_user)):
+    print("ADMIN CHECK:", current_user.email, current_user.is_admin)
+
+    if not bool(current_user.is_admin):
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+
+    return current_user
+
 
 @app.get("/")
 # Lightweight health-check endpoint for local verification and deployments.
@@ -142,7 +153,7 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
         first_name=user.first_name,
         last_name=user.last_name,
         email=user.email,
-        password=hash_password(user.password)
+        hashed_password=hash_password(user.password)
     )
 
     db.add(new_user)
@@ -164,7 +175,7 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="User not found")
 
     # Verify the submitted password against the stored hash.
-    if not pwd_context.verify(user.password, str(db_user.password)):
+    if not pwd_context.verify(user.password, str(db_user.hashed_password)):
         raise HTTPException(status_code=400, detail="Invalid password")
 
 
@@ -185,14 +196,15 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
         "id": db_user.id,
         "first_name": db_user.first_name,
         "last_name": db_user.last_name,
-        "email": db_user.email
+        "email": db_user.email,
+        "is_admin": db_user.is_admin
     }
 }
 
 
 
 def detect_intent(user_story: str, db):
-    categories = db.query(Category).all()
+    categories = db.query(models.Category).all()
 
     # 🛑 Prevent crash if DB is empty
     if not categories:
@@ -270,7 +282,7 @@ def create_test_case(tc_id: str, description: str, expected_result: str):
 
 
 def get_scenario_types(intent: str, db):
-    scenarios = db.query(Scenario).filter(Scenario.intent == intent).all()
+    scenarios = db.query(models.Scenario).filter(models.Scenario.intent == intent).all()
 
     if not scenarios:
         return ["positive", "invalid", "missing", "boundary"]
@@ -571,11 +583,8 @@ def generate_test_cases(
             "test_cases": [],
             "error": "This user story does not match any supported feature category. Please rephrase the story.",
             "available_categories": [
-                "authentication",
-                "registration",
-                "search",
-                "payment",
-                "cart"
+                category.label
+                for category in db.query(models.Category).all()
             ]
         }
 
@@ -704,7 +713,8 @@ def submit_correction_feedback(
         predicted_intent=data.get("predicted_intent"),
         correct_intent=correct_intent,
         suggested_category=suggested_category,
-        rating=rating
+        rating=rating,
+        status="pending"
     )
 
     db.add(feedback)
@@ -801,7 +811,7 @@ def reset_password(
 
     # Overwrite the old password and clear the reset token so it cannot be
     # reused after a successful reset.
-    setattr(user, "password", hash_password(data.new_password))
+    setattr(user, "hashed_password", hash_password(data.new_password))
     setattr(user, "reset_token", None)
     setattr(user, "reset_token_expiry", None)
 
@@ -823,3 +833,81 @@ def get_categories(db: Session = Depends(get_db)):
         }
         for category in categories
     ]
+
+
+
+@app.get(
+    "/admin/feedback",
+    response_model=list[schemas.FeedbackReviewResponse]
+)
+def get_feedback_reviews(
+    db: Session = Depends(get_db),
+    admin_user: models.User = Depends(require_admin)
+):
+    feedback_list = db.query(models.Feedback).filter(
+        models.Feedback.suggested_category != None
+    ).order_by(models.Feedback.id.desc()).all()
+
+    return feedback_list
+
+
+
+@app.post("/admin/feedback/{feedback_id}/approve")
+def approve_feedback_category(
+    feedback_id: int,
+    db: Session = Depends(get_db),
+    admin_user: models.User = Depends(require_admin)
+):
+    feedback = db.query(models.Feedback).filter(
+        models.Feedback.id == feedback_id
+    ).first()
+
+    if not feedback:
+        raise HTTPException(status_code=404, detail="Feedback not found")
+
+    if getattr(feedback, "status", "pending") != "pending":
+        raise HTTPException(status_code=400, detail="Already reviewed")
+
+    if feedback.suggested_category is None or feedback.suggested_category.strip() == "":
+        raise HTTPException(status_code=400, detail="No suggested category found")
+
+    suggested_label = feedback.suggested_category.strip().lower()
+
+    existing_category = db.query(models.Category).filter(
+        models.Category.label == suggested_label
+    ).first()
+
+    if not existing_category:
+        new_category = models.Category(
+            label=suggested_label,
+            description=f"User suggested category for {suggested_label}"
+        )
+        db.add(new_category)
+
+    setattr(feedback, "status", "approved")
+    db.commit()
+
+    return {"message": "Suggested category approved successfully"}
+
+
+
+@app.post("/admin/feedback/{feedback_id}/reject")
+def reject_feedback_category(
+    feedback_id: int,
+    db: Session = Depends(get_db),
+    admin_user: models.User = Depends(require_admin)
+):
+    feedback = db.query(models.Feedback).filter(
+        models.Feedback.id == feedback_id
+    ).first()
+
+    if feedback is None:
+        raise HTTPException(status_code=404, detail="Feedback not found")
+
+    if getattr(feedback, "status", "pending") != "pending":
+        raise HTTPException(status_code=400, detail="Already reviewed")
+
+    setattr(feedback, "status", "rejected")
+    db.commit()
+
+    return {"message": "Suggested category rejected successfully"}
